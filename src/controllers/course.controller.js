@@ -178,7 +178,6 @@ const getAllCourses = asyncHandler(async (req, res) => {
 });
 const getAllCoursesForAdmin = asyncHandler(async (req, res) => {
   const allCourses = await Course.find()
-    .populate("category")
     .populate({
       path: "courseContent",
       populate: {
@@ -353,7 +352,7 @@ const enrollInCourse = asyncHandler(async (req, res) => {
       $push: { courses: courseId },
     },
     { new: true }
-  );
+  ).select('-password');
   await course.save();
   return res
     .status(200)
